@@ -1,0 +1,101 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Unblocked Montepo: accede a juegos, música y streaming con enlaces a UBG Games, Youtube, Kick, Spotify y Minecraft.">
+    <meta name="google-site-verification" content="código-de-verificación-aquí" />
+    <title>Unblocked Montepo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Encabezado -->
+    <header class="bg-blue-600 text-white p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Unblocked Montepo</h1>
+            <ul class="flex space-x-4">
+                <li><a href="https://www.symbaloo.com/mix/agariounblockedschool?lang=ES" class="hover:underline">Symbaloo</a></li>
+                <li><a href="https://classicminecraft.github.io/" class="hover:underline">Minecraft</a></li>
+                <li><a href="https://www.transfermarkt.es/whoami" class="hover:underline">Who I am?</a></li>
+                <li><a href="https://ubggames.com/" class="hover:underline">UBG Games</a></li>
+                <li><a href="https://www.youtube.com/?app=desktop&hl=es" class="hover:underline">Youtube</a></li>
+                <li><a href="https://kick.com/" class="hover:underline">Kick</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Principal -->
+    <main class="container mx-auto my-8 p-4 bg-white rounded-lg shadow-md">
+        <section class="text-center">
+            <h2 class="text-3xl font-bold mb-4">¡A Divertirse!</h2>
+            <p class="text-lg mb-6">Explora juegos, música y streaming en Unblocked Montepo. Accede a UBG Games, Youtube, Kick y Spotify desde un solo lugar.</p>
+            <a href="https://open.spotify.com/intl-es" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 inline-block">
+                Música de Spotify
+            </a>
+            <div class="mt-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Galicia.svg" alt="Bandera de Galicia" class="mx-auto h-16">
+            </div>
+            <div class="mt-4 float-right">
+                <a href="https://es.higherorlowergame.com/imdb/taquilla-de-peliculas/" class="text-3xl hover:underline">Higher or Lower</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="bg-gray-800 text-white text-center p-4">
+        <p>© 2025 Mi Sitio. Todos los derechos reservados.</p>
+        <div class="mt-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Galicia.svg" alt="Bandera de Galicia" class="mx-auto h-12">
+        </div>
+    </footer>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XKGQ4VZ410"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XKGQ4VZ410');
+    </script>
+</body>
+</html>
